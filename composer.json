@@ -1,0 +1,13 @@
+{
+    "name": "spritz/spritz-google-reviews",
+    "description": "Spritz Google Reviews Plugin",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Spritz",
+            "email": "contact@agence-spritz.com"
+        }
+    ],
+    "require": {}
+}
