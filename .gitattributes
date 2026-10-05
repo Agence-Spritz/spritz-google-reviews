@@ -1,0 +1,5 @@
+# Fichiers exclus du zip de release (git archive)
+/.github export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/composer.json export-ignore

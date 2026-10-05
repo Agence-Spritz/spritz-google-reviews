@@ -1,0 +1,36 @@
+# Publication d'une version : git tag vX.Y.Z && git push origin vX.Y.Z
+# → vérifie la cohérence tag / en-tête "Version:", construit spritz-google-reviews.zip et crée la release GitHub.
+# Le zip est l'asset utilisé par plugin-update-checker (mises à jour) et par TGMPA (installation).
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vérifier la version du plugin
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          HEADER=$(grep -m1 -E '^\s*\*?\s*Version:' spritz-google-reviews.php | sed -E 's/.*Version:\s*//' | tr -d '[:space:]')
+          if [ "$TAG" != "$HEADER" ]; then
+            echo "::error::Le tag ($TAG) ne correspond pas à l'en-tête Version ($HEADER) de spritz-google-reviews.php"
+            exit 1
+          fi
+
+      - name: Construire le zip
+        run: git archive --format=zip --prefix=spritz-google-reviews/ -o spritz-google-reviews.zip HEAD
+
+      - name: Créer la release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: spritz-google-reviews.zip
+          generate_release_notes: true
